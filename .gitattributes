@@ -1,2 +1,3 @@
 # Force all scripts to be checkout with LF EOL
 *.sh text eol=lf
+*.py filter=spabs
