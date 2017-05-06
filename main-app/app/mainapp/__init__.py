@@ -7,8 +7,8 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 db = psycopg2.connect(host="main-db", database="goodaki", user="goodaki", password="goodaki")
 
-import mainapp.controller as controller
-import mainapp.model as model
+# import mainapp.controller as controller
+# import mainapp.model as model
 
 @app.route('/')
 def hello():

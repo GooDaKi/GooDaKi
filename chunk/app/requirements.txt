@@ -7,3 +7,4 @@ bcrypt
 requests
 flask-mail
 pymongo
+flask_pymongo

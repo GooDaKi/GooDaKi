@@ -1,1 +1,1 @@
-from courseapp.controller import course_controller
+from courseapp.controller import course_control
