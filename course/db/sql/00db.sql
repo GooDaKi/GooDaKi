@@ -1,60 +1,60 @@
-create table if not exists "Subject" (
-    subjectID       serial,
-    name            varchar(255),
-    description     text,
-    created_at      timestamp,
-    updated_at      timestamp,
-    authorID        int,
-    primary key (subjectID)
+CREATE TABLE IF NOT EXISTS "Subject" (
+  subjectID   SERIAL,
+  name        VARCHAR(255),
+  description TEXT,
+  created_at  TIMESTAMP,
+  updated_at  TIMESTAMP,
+  authorID    INT,
+  PRIMARY KEY (subjectID)
 );
 
-create table if not exists "Course" (
-    courseID        serial,
-    name            varchar(255),
-    description     text,
-    created_at      timestamp,
-    updated_at      timestamp,
-    authorID        int,
-    primary key (courseID)
+CREATE TABLE IF NOT EXISTS "Course" (
+  courseID    SERIAL,
+  name        VARCHAR(255),
+  description TEXT,
+  created_at  TIMESTAMP,
+  updated_at  TIMESTAMP,
+  authorID    INT,
+  PRIMARY KEY (courseID)
 );
 
-create table if not exists "CareerPath" (
-    careerID        serial,
-    name            varchar(255),
-    description     text,
-    created_at      timestamp,
-    updated_at      timestamp,
-    authorID        int,
-    primary key (careerID)
+CREATE TABLE IF NOT EXISTS "CareerPath" (
+  careerID    SERIAL,
+  name        VARCHAR(255),
+  description TEXT,
+  created_at  TIMESTAMP,
+  updated_at  TIMESTAMP,
+  authorID    INT,
+  PRIMARY KEY (careerID)
 );
 
-create table if not exists "ChunkInSubject" (
-    chunkID         int,
-    subjectID       int,
-    order           int,
-    primary key (chunkID, subjectID),
-    foreign key (subjectID) references "Subject",
-    unique (chunkID, subjectID, order)
+CREATE TABLE IF NOT EXISTS "ChunkInSubject" (
+  chunkID   VARCHAR(50),
+  subjectID INT,
+  ordering  INT,
+  PRIMARY KEY (chunkID, subjectID),
+  FOREIGN KEY (subjectID) REFERENCES "Subject",
+  UNIQUE (chunkID, subjectID, ordering)
 );
 
-create table if not exists "SubjectInCourse" (
-    subjectID       int,
-    courseID        int,
-    order           int,
-    primary key (subjectID, courseID),
-    foreign key (subjectID) references "Subject"(subjectID),
-    foreign key (courseID) references "Course"(courseID),
-    unique (subjectID, courseID, order)
+CREATE TABLE IF NOT EXISTS "SubjectInCourse" (
+  subjectID INT,
+  courseID  INT,
+  ordering     INT,
+  PRIMARY KEY (subjectID, courseID),
+  FOREIGN KEY (subjectID) REFERENCES "Subject" (subjectID),
+  FOREIGN KEY (courseID) REFERENCES "Course" (courseID),
+  UNIQUE (subjectID, courseID, ordering)
 );
 
-create table if not exists "CourseInCareerPath" (
-    courseID        int,
-    careerID        int,
-    order           int,
-    primary key (courseID, careerID),
-    foreign key (courseID) references "Course"(courseID),
-    foreign key (careerID) references "CareerPath"(careerID),
-    unique(courseID, careerID, order)
+CREATE TABLE IF NOT EXISTS "CourseInCareerPath" (
+  courseID INT,
+  careerID INT,
+  ordering    INT,
+  PRIMARY KEY (courseID, careerID),
+  FOREIGN KEY (courseID) REFERENCES "Course" (courseID),
+  FOREIGN KEY (careerID) REFERENCES "CareerPath" (careerID),
+  UNIQUE (courseID, careerID, ordering)
 );
 
 -- TODO: table for tags
