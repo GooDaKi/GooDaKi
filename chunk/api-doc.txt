@@ -31,21 +31,19 @@ example of types
     "answer" : string
 }
 
-:Chunk ## may subject to changes
-{
-    "chunkid": string,
-    "chunkname": string,
-    "authorid": string,
-    "type": string,
-    "video-link": string (url), # if it is a video
-    "description": string,
-    "text": string,   # the if the chunk is text-based or have text to show
-    "created": DateTime,
-    "updated": DateTime,
-    "pretest" : test,
-    "posttest" : test,
-    "tags": [tags(string)]
-}
+ :Chunk ## may subject to changes
+ {
+     "id": string,
+     "name": string,
+     "author_id": string,
+     "type": string,
+     "video-link": string (url), # if it is a video
+     "description": string,
+     "text": string,   # the if the chunk is text-based or have text to show
+     "created": DateTime,
+     "updated": DateTime,
+     "tags": [tags(string)]
+ }
 
 
 get /api/chunk/{id}
