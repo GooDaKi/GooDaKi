@@ -34,6 +34,15 @@ def getCourseByAuthor(authorid):
 		out,more_courses = model.Course.get_by_author_id(authorid)
 	return jsonify(dict(course=list(map(lambda x: x.__dict__, out)), more_courses=more_courses))
 
+
+# example request for create
+# {
+# 	"courseName":"testssssssssssssssssssssssssssss",
+# 	"description":"testcreatecourse2",
+# 	"authorID":1,
+# 	"subjects":[1,3] <-- option
+# }
+
 @app.route('/api/course' , methods=['POST'])
 def createCourse():
 	info = request.get_json()
@@ -42,11 +51,18 @@ def createCourse():
 		return 'error occurred.', 400
 	return 'successfully create course name: {}'.format(info['courseName'])
 
-
+# example request for search
+# {
+# 	"query":1,
+# 	"course-count":0 <- option
+# }
 @app.route('/api/course/search' , methods=['POST'])
 def searchCourse():
 	info = request.get_json()
-	cur_course_count = request.args.get('course-count', 0, type=int)
+	if 'course-count' in info:
+		cur_course_count = info['course-count']
+	else:
+		cur_course_count = 0
 	if 'limit' in request.args:
 		limit = int(request.args['limit'])
 		out, more_courses = model.Course.search(info['query'], limit_no=limit, scroll_no=cur_course_count,all=False)
@@ -54,6 +70,14 @@ def searchCourse():
 		out, more_courses = model.Course.search(info['query'])
 	return jsonify(dict(course=list(map(lambda x: x.__dict__, out)), more_courses=more_courses))
 
+# example request for edit
+# {
+# 	"courseID":1,
+# 	"courseName":"testssssssssssssssssssssssssssss",
+# 	"description":"testcreatecourse2",
+# 	"subjects":[1,3]
+#  all field is option except id
+# }
 
 @app.route('/api/course' , methods=['PUT'])
 def editCourse():
@@ -88,13 +112,11 @@ def getSubjectInfo(id):
 @app.route('/api/course/subject' , methods=['GET'])
 def getAllSubject():
 	cur_subject_count = request.args.get('subject-count', 6, type=int)
-	# if 'limit' in request.args:
-	# 	limit = int(request.args['limit'])
-	# 	outs,more_subjects = model.Subject.get_all(limit_no=limit, scroll_no=cur_subject_count,all=False)
-	# else:
-	# 	outs,more_subjects = model.Subject.get_all()
-
-	outs, more_subjects = model.Subject.get_all(limit_no=3, scroll_no=cur_subject_count, all=False)
+	if 'limit' in request.args:
+		limit = int(request.args['limit'])
+		outs,more_subjects = model.Subject.get_all(limit_no=limit, scroll_no=cur_subject_count,all=False)
+	else:
+		outs,more_subjects = model.Subject.get_all()
 	url_base = 'http://chunk-app:5000/api/chunk/'
 	for out in outs:
 		checked_chunk = list()
@@ -123,6 +145,14 @@ def getSubjectByAuthor(authorid):
 		out.chunks = checked_chunk
 	return jsonify(dict(course=list(map(lambda x: x.__dict__, outs)), more_subjects=more_subjects))
 
+# example request for create
+# {
+# 	"subjectName":"testssss",
+# 	"description":"testcreatesubject2",
+# 	"authorID":1,
+# 	"chunks":[] <-- option
+# }
+
 @app.route('/api/course/subject' , methods=['POST'])
 def createSubject():
 	info = request.get_json()
@@ -131,11 +161,19 @@ def createSubject():
 		return 'error occurred.', 400
 	return 'successfully create subject name: {}'.format(info['subjectName'])
 
+# example request for search
+# {
+# 	"query":1,
+# 	"subject-count":0 <- option
+# }
 
 @app.route('/api/course/subject/search' , methods=['POST'])
 def searchSubject():
 	info = request.get_json()
-	cur_subject_count = request.args.get('subject-count', 0, type=int)
+	if 'subject-count' in info:
+		cur_subject_count = info['subject-count']
+	else:
+		cur_subject_count = 0
 	if 'limit' in request.args:
 		limit = int(request.args['limit'])
 		outs, more_subjects = model.Subject.search(info['query'], limit_no=limit, scroll_no=cur_subject_count,all=False)
@@ -152,6 +190,14 @@ def searchSubject():
 		out.chunks = checked_chunk
 	return jsonify(dict(course=list(map(lambda x: x.__dict__, outs)), more_subjects=more_subjects))
 
+# example request for edit
+# {
+# 	"subjectID":1,
+# 	"courseName":"testssssssssssssssssssssssssssss",
+# 	"description":"testcreatecourse2",
+# 	"chunks":[]
+#  all field is option except id
+# }
 
 @app.route('/api/course/subject' , methods=['PUT'])
 def editSubject():
