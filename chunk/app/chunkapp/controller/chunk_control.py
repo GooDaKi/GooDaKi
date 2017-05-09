@@ -53,6 +53,10 @@ def create_any(name='NAME'):
 @app.route('/api/chunk/<chunk_id>')
 def get_chunk_by_id(chunk_id):
     chunk = model.Chunk.load(chunk_id)
+    if chunk is None:
+        return jsonify(dict(error='chunk_id is not valid')), 400
+    elif type(chunk) is bool and chunk is False:
+        return jsonify(dict(error='chunk not found')), 500
     return jsonify(chunk.__dict__)
 
 

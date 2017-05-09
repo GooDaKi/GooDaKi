@@ -72,7 +72,12 @@ class Chunk:
 
     @staticmethod
     def load(chunk_id):
+        chunk_validator = re.compile('^[0-9a-fA-F]{24}$')
+        if not re.match(chunk_validator, chunk_id):
+            return None
         obj = g.db.chunk.find_one({'_id': g.ObjectId(chunk_id)})
+        if obj is None:
+            return False
         return Chunk(obj)
 
     @staticmethod
