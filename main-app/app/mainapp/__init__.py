@@ -7,6 +7,7 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 db = psycopg2.connect(host="main-db", database="goodaki", user="goodaki", password="goodaki")
 
+
 # import mainapp.controller as controller
 # import mainapp.model as model
 
@@ -14,9 +15,11 @@ db = psycopg2.connect(host="main-db", database="goodaki", user="goodaki", passwo
 def hello():
     return "Hello, This is GooDaKi main app"
 
+
 @app.route('/api/demo')
 def api_demo_get():
     return jsonify(dict(success=True))
+
 
 @app.route('/api/demo_post', methods=["POST"])
 def api_demo_post():
