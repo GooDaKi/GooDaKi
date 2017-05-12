@@ -96,11 +96,12 @@ def search_course():
 @app.route('/api/course', methods=['PUT'])
 def edit_course():
     info = request.get_json()
-    out = model.Course.get_by_id(info['courseID'])
-    result = out.edit(info)
+    course = model.Course.get_by_id(info['courseID'])
+    course = course.edit(info)
+    result = course.save()
     if result is None:
         return 'error occurred.', 400
-    return 'successfully edit course name: {}'.format(out.courseName), result
+    return 'successfully edit course name: {}'.format(course.courseName), result
 
 
 @app.route('/api/course/<id>', methods=['DELETE'])
@@ -232,7 +233,8 @@ def search_subject():
 def edit_subject():
     info = request.get_json()
     subject = model.Subject.get_by_id(info['subjectID'])
-    result = subject.edit(info)
+    subject = subject.edit(info)
+    result = subject.save()
     if result is None:
         return 'error occurred.', 400
     return 'successfully edit subject name: {}'.format(info['subjectName'])

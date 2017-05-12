@@ -3,8 +3,6 @@
 from flask import g
 import datetime
 import time
-import psycopg2
-import psycopg2.extras
 from psycopg2 import ProgrammingError
 
 class Course:
@@ -34,27 +32,23 @@ class Course:
         if 'description' in info:
             self.description = info['description']
         self.updated = time.strftime("%Y-%m-%d %H:%M:%S")
-        temp = self.subjects
         if 'subjects' in info:
             if len(info['subjects']) == 0:
                 self.subjects = None
             else:
                 self.subjects = info['subjects']
-        option = True
-        if temp == self.subjects:
-            option = False
-        return self.save(option)
+        return self
 
-    def save(self,option):
-        cursor = g.db.cursor(cursor_factory = psycopg2.extras.DictCursor)
+    def save(self):
+        cursor = g.db.cursor()
         cursor.execute('UPDATE "Course" SET (name, description, updated_at) = ((%s), (%s), (%s)) WHERE courseID = (%s);',
                     (self.courseName, self.description, self.updated, self.courseID))
         if cursor.rowcount == 0:
             cursor.close()
             return None
         cursor.close()
-        if option:
-            cursor = g.db.cursor(cursor_factory = psycopg2.extras.DictCursor)
+        if self.subjects is not None:
+            cursor = g.db.cursor()
             cursor.execute(
                 'DELETE FROM "SubjectInCourse"  WHERE courseID = (%s);',
                 (self.courseID,))
@@ -62,17 +56,15 @@ class Course:
                 cursor.close()
                 return None
             cursor.close()
-
-            if self.subjects is not None:
-                for i in range(len(self.subjects)):
-                    cursor = g.db.cursor(cursor_factory = psycopg2.extras.DictCursor)
-                    cursor.execute(
-                        'INSERT INTO "SubjectInCourse" (subjectID,ordering,courseID) VALUES (%s,%s,%s) ;',
-                        (self.subjects[i], i+1 , self.courseID))
-                    if cursor.rowcount == 0:
-                        cursor.close()
-                        return None
+            for i in range(len(self.subjects)):
+                cursor = g.db.cursor()
+                cursor.execute(
+                    'INSERT INTO "SubjectInCourse" (subjectID,ordering,courseID) VALUES (%s,%s,%s) ;',
+                    (self.subjects[i], i+1 , self.courseID))
+                if cursor.rowcount <= 0:
                     cursor.close()
+                    return None
+                cursor.close()
 
         g.db.commit()
         return True
@@ -80,7 +72,7 @@ class Course:
 
     @staticmethod
     def get_by_id(courseid):
-        cursor = g.db.cursor(cursor_factory = psycopg2.extras.DictCursor)
+        cursor = g.db.cursor()
         cursor.execute('SELECT * FROM "Course" WHERE courseID = (%s) ', (courseid,))
         if cursor.rowcount <= 0:
             cursor.close()
@@ -89,7 +81,7 @@ class Course:
         if not bool(ret['status']):
             return None
         cursor.close()
-        cursor = g.db.cursor(cursor_factory = psycopg2.extras.DictCursor)
+        cursor = g.db.cursor()
         cursor.execute('SELECT subjectID FROM "SubjectInCourse" WHERE courseID = (%s) ORDER BY ordering', (courseid,))
         if cursor.rowcount < 0:
             cursor.close()
@@ -99,7 +91,7 @@ class Course:
             subject_ = list()
             cursor.close()
             for subject in subjects:
-                cursor = g.db.cursor(cursor_factory = psycopg2.extras.DictCursor)
+                cursor = g.db.cursor()
                 cursor.execute('SELECT status FROM "Subject" WHERE subjectID = (%s) ', (subject['subjectid'],))
                 if cursor.rowcount <= 0:
                     cursor.close()
@@ -113,7 +105,7 @@ class Course:
 
     @staticmethod
     def get_all(limit_no=2,scroll_no=0,all=True):
-        cursor = g.db.cursor(cursor_factory = psycopg2.extras.DictCursor)
+        cursor = g.db.cursor()
         cursor.execute('SELECT * FROM "Course"')
         if cursor.rowcount <= 0:
             cursor.close()
@@ -135,7 +127,7 @@ class Course:
         for course in temp:
             if not bool(course['status']):
                 continue
-            cursor = g.db.cursor(cursor_factory = psycopg2.extras.DictCursor)
+            cursor = g.db.cursor()
             cursor.execute('SELECT subjectID FROM "SubjectInCourse" WHERE courseID = (%s) ORDER BY ordering',
                            (course['courseid'],))
             if cursor.rowcount < 0:
@@ -145,7 +137,7 @@ class Course:
             subject_ = list()
             cursor.close()
             for subject in subjects:
-                cursor = g.db.cursor(cursor_factory = psycopg2.extras.DictCursor)
+                cursor = g.db.cursor()
                 cursor.execute('SELECT status FROM "Subject" WHERE subjectID = (%s) ', (subject['subjectid'],))
                 if cursor.rowcount <= 0:
                     cursor.close()
@@ -160,7 +152,7 @@ class Course:
 
     @staticmethod
     def get_by_author_id(authorid,limit_no=2,scroll_no=0,all=True):
-        cursor = g.db.cursor(cursor_factory = psycopg2.extras.DictCursor)
+        cursor = g.db.cursor()
         cursor.execute('SELECT * FROM "Course" WHERE authorID = (%s)', (authorid,))
         if cursor.rowcount <= 0:
             cursor.close()
@@ -182,7 +174,7 @@ class Course:
         for course in temp:
             if not bool(course['status']):
                 continue
-            cursor = g.db.cursor(cursor_factory = psycopg2.extras.DictCursor)
+            cursor = g.db.cursor()
             cursor.execute('SELECT subjectID FROM "SubjectInCourse" WHERE courseID = (%s) ORDER BY ordering', (course['courseid'],))
             if cursor.rowcount < 0:
                 cursor.close()
@@ -191,7 +183,7 @@ class Course:
             subject_ = list()
             cursor.close()
             for subject in subjects:
-                cursor = g.db.cursor(cursor_factory = psycopg2.extras.DictCursor)
+                cursor = g.db.cursor()
                 cursor.execute('SELECT status FROM "Subject" WHERE subjectID = (%s) ', (subject['subjectid'],))
                 if cursor.rowcount <= 0:
                     cursor.close()
@@ -206,7 +198,7 @@ class Course:
 
     @staticmethod
     def create(info):
-        cursor = g.db.cursor(cursor_factory = psycopg2.extras.DictCursor)
+        cursor = g.db.cursor()
         cursor.execute(
             """INSERT INTO "Course" (name,description,created_at,updated_at,authorID,status) VALUES (%s,%s,%s,%s,%s,%s) RETURNING courseID;""",
             (info['courseName'], info['description'],time.strftime("%Y-%m-%d %H:%M:%S"),time.strftime("%Y-%m-%d %H:%M:%S"),info['authorID'],True ))
@@ -218,7 +210,7 @@ class Course:
         if "subjects" in info:
             temp = info['subjects']
             for i in range(len(info['subjects'])):
-                cursor = g.db.cursor(cursor_factory = psycopg2.extras.DictCursor)
+                cursor = g.db.cursor()
                 cursor.execute(
                     """INSERT INTO "SubjectInCourse" (subjectID,courseID,ordering)  VALUES (%s,%s,%s);""",
                     (temp[i], ret, i+1))
@@ -232,7 +224,7 @@ class Course:
     @staticmethod
     def search(query,limit_no=2,scroll_no=0,all=True):
         query = query.strip()
-        cursor = g.db.cursor(cursor_factory = psycopg2.extras.DictCursor)
+        cursor = g.db.cursor()
         cursor.execute('SELECT * FROM "Course" WHERE name ~* (%s) OR description ~* (%s)', (query, query))
         if cursor.rowcount <= 0:
             cursor.close()
@@ -254,7 +246,7 @@ class Course:
         for course in temp:
             if not bool(course['status']):
                 continue
-            cursor = g.db.cursor(cursor_factory = psycopg2.extras.DictCursor)
+            cursor = g.db.cursor()
             cursor.execute('SELECT subjectID FROM "SubjectInCourse" WHERE courseID = (%s) ORDER BY ordering', (course['courseid'],))
             if cursor.rowcount < 0:
                 cursor.close()
@@ -263,7 +255,7 @@ class Course:
             subject_ = list()
             cursor.close()
             for subject in subjects:
-                cursor = g.db.cursor(cursor_factory = psycopg2.extras.DictCursor)
+                cursor = g.db.cursor()
                 cursor.execute('SELECT status FROM "Subject" WHERE subjectID = (%s) ', (subject['subjectid'],))
                 if cursor.rowcount <= 0:
                     cursor.close()

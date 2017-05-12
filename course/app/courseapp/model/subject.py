@@ -33,26 +33,22 @@ class Subject:
         if 'description' in info:
             self.description = info['description']
         self.updated = time.strftime("%Y-%m-%d %H:%M:%S")
-        temp = self.chunks
         if 'chunks' in info:
             if len(info['chunks']) == 0:
                 self.chunks = None
             else:
                 self.chunks = info['chunks']
-        option = True
-        if temp == self.chunks:
-            option = False
-        return self.save(option)
+        return self
 
-    def save(self,option):
-        cursor = g.db.cursor(cursor_factory = psycopg2.extras.DictCursor)
+    def save(self):
+        cursor = g.db.cursor()
         cursor.execute('UPDATE "Subject" SET (name, description, updated_at) = ((%s), (%s), (%s)) WHERE subjectID = (%s);',
                     (self.subjectName, self.description, self.updated, self.subjectID))
         if cursor.rowcount == 0:
             cursor.close()
             return None
         cursor.close()
-        if option:
+        if self.chunks is not None:
             cursor = g.db.cursor(cursor_factory = psycopg2.extras.DictCursor)
             cursor.execute(
                 'DELETE FROM "ChunkInSubject"  WHERE subjectID = (%s);',
@@ -61,17 +57,15 @@ class Subject:
                 cursor.close()
                 return None
             cursor.close()
-
-            if self.chunks is not None:
-                for i in range(len(self.chunks)):
-                    cursor = g.db.cursor(cursor_factory = psycopg2.extras.DictCursor)
-                    cursor.execute(
-                        'INSERT INTO "ChunkInSubject" (chunkID,ordering,subjectID) VALUES (%s,%s,%s) ;',
-                        (self.chunks[i], i+1 , self.subjectID))
-                    if cursor.rowcount == 0:
-                        cursor.close()
-                        return None
+            for i in range(len(self.chunks)):
+                cursor = g.db.cursor(cursor_factory = psycopg2.extras.DictCursor)
+                cursor.execute(
+                    'INSERT INTO "ChunkInSubject" (chunkID,ordering,subjectID) VALUES (%s,%s,%s) ;',
+                    (self.chunks[i], i+1 , self.subjectID))
+                if cursor.rowcount == 0:
                     cursor.close()
+                    return None
+                cursor.close()
 
         g.db.commit()
         return True
