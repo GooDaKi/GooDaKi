@@ -1,4 +1,5 @@
-create table if not exists "User" (
+CREATE TYPE sex_enum AS ENUM ('M', 'F');
+CREATE TABLE IF NOT EXISTS "User" (
     userID      SERIAL,
     username    VARCHAR(64),
     password    VARCHAR(255),
@@ -14,13 +15,13 @@ create table if not exists "User" (
     UNIQUE (email)
 );
 
-create table if not exists "Portfolio" (
+CREATE TABLE IF NOT EXISTS "Portfolio" (
     portID      SERIAL,
     education   TEXT,
-    PRIMARY KEY (portID),
+    PRIMARY KEY (portID)
 );
 
-create table if not exists "Has_portfolio" (
+CREATE TABLE IF NOT EXISTS "Has_portfolio" (
     userID      INT,
     portID      INT,
     PRIMARY KEY (userID, portID),
@@ -28,20 +29,35 @@ create table if not exists "Has_portfolio" (
     FOREIGN KEY (portID) REFERENCES "Portfolio" (portID)
 );
 
-create table if not exists "Taking_course" (
+CREATE TABLE IF NOT EXISTS "Taking_course" (
     portID      INT,
-    courseID    INT,
-    subjectOrder  INT,
-    chunkOrder INT,
+    courseID    INT UNIQUE,
+    subjectID  	INT,
+    chunkID 	INT,
     PRIMARY KEY (portID, courseID),
     FOREIGN KEY (portID) REFERENCES "Portfolio" (portID)
 );
 
 
-
-create table if not exists "Taken_course" (
+CREATE TABLE IF NOT EXISTS "Taken_course" (
     portID      INT,
     courseID    INT,
-    PRIMARY KEY (portID, courseID),
+    subjectID	INT,
+    chunkID		INT,
+	score 		REAL,
+    PRIMARY KEY (portID,courseID,subjectID,chunkID),
     FOREIGN KEY (portID) REFERENCES "Portfolio" (portID)
+);
+
+
+CREATE TABLE IF NOT EXISTS "Taking_course_score" (
+	portID		INT,
+	courseID	INT,
+	subjectID	INT,
+	chunkID		INT,
+	score 		REAL,
+	PRIMARY KEY (portID,courseID,subjectID,chunkID),
+	FOREIGN KEY (portID) REFERENCES "Portfolio" (portID),
+	FOREIGN KEY (courseID) REFERENCES "Taking_course" (courseID)
+
 );
