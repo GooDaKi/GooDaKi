@@ -12,4 +12,10 @@ import mainapp.model as model
 
 @login_manager.user_loader
 def load_user(userid):
-    pass
+    user = model.User.load(userid)
+    if user is None:
+        return None
+    # TODO implement some roles to authorize access
+    return user
+
+
