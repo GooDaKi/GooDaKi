@@ -1,0 +1,3 @@
+status of course
+1 = exist in database
+0 = deleted from database(soft delete)

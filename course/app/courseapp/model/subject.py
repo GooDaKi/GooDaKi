@@ -79,18 +79,18 @@ class Subject:
             cursor.close()
             return None
         ret = cursor.fetchone()
-        if not bool(ret['status']):
+        if ret['status'] == 0:
             return None
         cursor.close()
         cursor = g.db.cursor(cursor_factory = psycopg2.extras.DictCursor)
         cursor.execute('SELECT chunkID FROM "ChunkInSubject" WHERE subjectID = (%s) ORDER BY ordering', (subjectid,))
         if cursor.rowcount < 0:
             cursor.close()
-            return Course(ret, None)
+            return Subject(ret, None)
         else:
             chunks = list(cursor.fetchall())
             cursor.close()
-            return Subject(ret,chunks)
+            return Subject(ret, chunks)
 
     @staticmethod
     def get_all(limit_no=2, scroll_no=0, all=True):
@@ -114,7 +114,7 @@ class Subject:
         temp = list(ret)
         result = list()
         for subject in temp:
-            if not bool(subject['status']):
+            if subject['status'] == 0:
                 continue
             cursor = g.db.cursor(cursor_factory = psycopg2.extras.DictCursor)
             cursor.execute('SELECT chunkID FROM "ChunkInSubject" WHERE subjectID = (%s) ORDER BY ordering',
@@ -149,7 +149,7 @@ class Subject:
         temp = list(ret)
         result = list()
         for subject in temp:
-            if not bool(subject['status']):
+            if subject['status'] == 0:
                 continue
             cursor = g.db.cursor(cursor_factory = psycopg2.extras.DictCursor)
             cursor.execute('SELECT chunkID FROM "ChunkInSubject" WHERE subjectID = (%s) ORDER BY ordering', (subject['subjectid'],))
@@ -166,7 +166,7 @@ class Subject:
         cursor = g.db.cursor(cursor_factory = psycopg2.extras.DictCursor)
         cursor.execute(
             """INSERT INTO "Subject" (name,description,created_at,updated_at,authorID,status)  VALUES (%s,%s,%s,%s,%s,%s) RETURNING subjectID ;""",
-            (info['subjectName'], info['description'],time.strftime("%Y-%m-%d %H:%M:%S"),time.strftime("%Y-%m-%d %H:%M:%S"),info['authorID'],True ))
+            (info['subjectName'], info['description'],time.strftime("%Y-%m-%d %H:%M:%S"),time.strftime("%Y-%m-%d %H:%M:%S"),info['authorID'],1))
         if cursor.rowcount == 0:
             cursor.close()
             return None
@@ -210,7 +210,7 @@ class Subject:
         temp = list(ret)
         result = list()
         for subject in temp:
-            if not bool(subject['status']):
+            if subject['status'] == 0:
                 continue
             cursor = g.db.cursor(cursor_factory = psycopg2.extras.DictCursor)
             cursor.execute('SELECT chunkID FROM "ChunkInSubject" WHERE subjectID = (%s) ORDER BY ordering', (subject['subjectid'],))
@@ -226,7 +226,7 @@ class Subject:
     @staticmethod
     def delete_by_id(subjectid):
         cursor = g.db.cursor(cursor_factory = psycopg2.extras.DictCursor)
-        cursor.execute('UPDATE "Subject" SET (status) = (%s) WHERE subjectID = (%s)', (False,subjectid))
+        cursor.execute('UPDATE "Subject" SET (status) = (%s) WHERE subjectID = (%s)', (0,subjectid))
         if cursor.rowcount < 0:
             cursor.close()
             return None

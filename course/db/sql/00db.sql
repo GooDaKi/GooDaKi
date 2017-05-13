@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS "Subject" (
   created_at  TIMESTAMP,
   updated_at  TIMESTAMP,
   authorID    INT,
-  status      BOOLEAN,
+  status      INT,
   PRIMARY KEY (subjectID)
 );
 
@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS "Course" (
   created_at  TIMESTAMP,
   updated_at  TIMESTAMP,
   authorID    INT,
-  status      BOOLEAN,
+  status      INT,
   PRIMARY KEY (courseID)
 );
 
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS "CareerPath" (
   created_at  TIMESTAMP,
   updated_at  TIMESTAMP,
   authorID    INT,
-  status      BOOLEAN,
+  status      INT,
   PRIMARY KEY (careerID)
 );
 

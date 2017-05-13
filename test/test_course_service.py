@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 import requests
-import json
-from flask import request, session, g, redirect, url_for, abort, render_template, flash, jsonify
 # define constants
 COURSE_APP = 'http://localhost:5001'
 

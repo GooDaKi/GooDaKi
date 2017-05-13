@@ -78,7 +78,7 @@ class Course:
             cursor.close()
             return None
         ret = cursor.fetchone()
-        if not bool(ret['status']):
+        if ret['status'] == 0:
             return None
         cursor.close()
         cursor = g.db.cursor()
@@ -99,7 +99,7 @@ class Course:
                 else:
                     ch = cursor.fetchone()
                     cursor.close()
-                    if bool(ch):
+                    if ch['status'] == 1:
                         subject_.append(subject['subjectid'])
             return Course(ret,subject_)
 
@@ -125,7 +125,7 @@ class Course:
         temp = list(ret)
         result = list()
         for course in temp:
-            if not bool(course['status']):
+            if course['status'] == 0:
                 continue
             cursor = g.db.cursor()
             cursor.execute('SELECT subjectID FROM "SubjectInCourse" WHERE courseID = (%s) ORDER BY ordering',
@@ -145,7 +145,7 @@ class Course:
                 else:
                     ch = cursor.fetchone()
                     cursor.close()
-                    if bool(ch):
+                    if ch['status'] == 1:
                         subject_.append(subject['subjectid'])
             result.append(Course(course, subject_))
         return result,has_more_courses
@@ -172,7 +172,7 @@ class Course:
         temp = list(ret)
         result = list()
         for course in temp:
-            if not bool(course['status']):
+            if course['status'] == 0:
                 continue
             cursor = g.db.cursor()
             cursor.execute('SELECT subjectID FROM "SubjectInCourse" WHERE courseID = (%s) ORDER BY ordering', (course['courseid'],))
@@ -191,7 +191,7 @@ class Course:
                 else:
                     ch = cursor.fetchone()
                     cursor.close()
-                    if bool(ch):
+                    if ch['status'] == 1:
                         subject_.append(subject['subjectid'])
             result.append(Course(course,subject_))
         return result,has_more_courses
@@ -201,7 +201,7 @@ class Course:
         cursor = g.db.cursor()
         cursor.execute(
             """INSERT INTO "Course" (name,description,created_at,updated_at,authorID,status) VALUES (%s,%s,%s,%s,%s,%s) RETURNING courseID;""",
-            (info['courseName'], info['description'],time.strftime("%Y-%m-%d %H:%M:%S"),time.strftime("%Y-%m-%d %H:%M:%S"),info['authorID'],True ))
+            (info['courseName'], info['description'],time.strftime("%Y-%m-%d %H:%M:%S"),time.strftime("%Y-%m-%d %H:%M:%S"),info['authorID'], 1))
         if cursor.rowcount == 0:
             cursor.close()
             return None
@@ -244,7 +244,7 @@ class Course:
         temp = list(ret)
         result = list()
         for course in temp:
-            if not bool(course['status']):
+            if course['status'] == 0:
                 continue
             cursor = g.db.cursor()
             cursor.execute('SELECT subjectID FROM "SubjectInCourse" WHERE courseID = (%s) ORDER BY ordering', (course['courseid'],))
@@ -263,7 +263,7 @@ class Course:
                 else:
                     ch = cursor.fetchone()
                     cursor.close()
-                    if bool(ch):
+                    if ch['status'] == 1:
                         subject_.append(subject['subjectid'])
             result.append(Course(course, subject_))
         return result,has_more_courses
@@ -272,7 +272,7 @@ class Course:
     @staticmethod
     def delete_by_id(courseid):
         cursor = g.db.cursor()
-        cursor.execute('UPDATE "Course" SET (status) = (%s) WHERE courseID = (%s)', (False,courseid))
+        cursor.execute('UPDATE "Course" SET (status) = (%s) WHERE courseID = (%s)', (0, courseid))
         if cursor.rowcount < 0:
             cursor.close()
             return None
