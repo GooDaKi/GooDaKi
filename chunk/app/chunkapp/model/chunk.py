@@ -82,7 +82,7 @@ class Chunk:
 
     @staticmethod
     def load_by_author(author_id):
-        cursor = g.db.chunk.find(dict(author_id=author_id))
+        cursor = g.db.chunk.find(dict(author_id=int(author_id)))
         ret = list(map(Chunk, cursor))
         return ret
 
@@ -98,12 +98,25 @@ class Chunk:
     @staticmethod
     def load_any():
         obj = g.db.chunk.find_one({})
+        if obj is None:
+            return None
         chunk = Chunk(obj)
         return chunk
+
+    @staticmethod
+    def get_all():
+        cursor = g.db.chunk.find({})
+        chunks = list(map(Chunk, cursor))
+        return chunks
 
     @staticmethod
     def delete_by_id(chunk_id):
         result = g.db.chunk.delete_one(dict(_id=g.ObjectId(chunk_id)))
         if result.deleted_count <= 0:
             return None
+        return True
+
+    @staticmethod
+    def delete_all():
+        g.db.chunk.delete_many({})
         return True

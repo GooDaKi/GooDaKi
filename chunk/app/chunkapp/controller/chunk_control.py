@@ -31,15 +31,18 @@ def test():
 
 @app.route('/api/chunk/all')
 def load_all():
-    model.Chunk.load()
+    chunks = model.Chunk.get_all()
+    if chunks is None:
+        return jsonify(dict(error='error occurred')), 500
+    return jsonify(list(map(lambda x: x.__dict__, chunks)))
 
 
 @app.route('/api/chunk/any')
 def load_any():
-    # return str(type(model.Chunk.load_any()))
     chunk = model.Chunk.load_any()
+    if chunk is None:
+        return jsonify(dict(error='no chunk found')), 500
     return jsonify(chunk.__dict__)
-    # return jsonify(chunk_to_dict(model.Chunk.load_any()))
 
 
 @app.route('/api/chunk/createany/<name>')
@@ -62,6 +65,8 @@ def get_chunk_by_id(chunk_id):
 
 @app.route('/api/chunk/author/<author_id>')
 def get_chunk_by_author_id(author_id):
+    if type(author_id) is not str or not author_id.isdigit():
+        return jsonify(dict(error='invalid author id')), 400
     chunks = model.Chunk.load_by_author(author_id)
     ret = list(map(lambda x: x.__dict__, chunks))
     return jsonify(ret)
@@ -101,3 +106,14 @@ def delete_chunk(chunk_id):
     if ret is None:
         return 'error occurred. Maybe the id is invalid', 400
     return 'deleted chunk with id: {}'.format(chunk_id)
+
+
+@app.route('/api/chunk/deleteall', methods=['POST'])
+def delete_all():
+    msg = 'success'
+    key = request.get_json()['key']
+    if key == 'delete all':
+        model.Chunk.delete_all()
+    else:
+        msg = 'error'
+    return jsonify(dict(msg=msg))
