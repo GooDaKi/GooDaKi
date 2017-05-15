@@ -75,11 +75,14 @@ def get_chunk_by_author_id(author_id):
 @app.route('/api/chunk', methods=['POST'])
 def create_chunk():
     options = request.get_json()
-    options = dict(options)
+    if 'id' in options:
+        return jsonify(dict(success=False, error='invalid key in body')), 400
     chunk = model.Chunk(options)
     new_id = chunk.save()
     if new_id is not None:
         return jsonify(dict(success=True, inserted_id=new_id))
+    else:
+        return jsonify(dict(success=False, error='something went wrong')), 500
 
 
 @app.route('/api/chunk', methods=['PUT'])
@@ -104,7 +107,9 @@ def search_for_chunks():
 def delete_chunk(chunk_id):
     ret = model.Chunk.delete_by_id(chunk_id)
     if ret is None:
-        return 'error occurred. Maybe the id is invalid', 400
+        return 'chunk-id is invalid', 400
+    if ret is False:
+        return 'no chunk found with id: {}'.format(chunk_id), 500
     return 'deleted chunk with id: {}'.format(chunk_id)
 
 

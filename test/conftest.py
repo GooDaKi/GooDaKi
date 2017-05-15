@@ -1,8 +1,32 @@
 # /usr/bin/env python
 
 import pytest
+import re
 from pymongo import MongoClient
 from bson.objectid import ObjectId
+
+
+def is_objectid(e):
+    objectid_validator = re.compile('^[0-9a-fA-F]{24}$')
+    return re.match(objectid_validator, str(e))
+
+
+class Dispose:
+    def __init__(self):
+        self.dispose_list = list()
+        self.db = db()
+
+    def __enter__(self):
+        return self.dispose_list
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        # print('dispose list contains {}'.format(self.dispose_list))
+        dispose_ids = list(filter(is_objectid, self.dispose_list))
+        for cid in dispose_ids:
+            self.db.chunk.delete_one(dict(_id=ObjectId(cid)))
+        dispose_objs = list(filter(lambda x: type(x) is dict, self.dispose_list))
+        for obj in dispose_objs:
+            self.db.chunk.delete_one(obj)
 
 
 class TestEnv:
@@ -42,7 +66,7 @@ class TestEnv:
 
         return list(zip(self.chunk_ids, chunk_objs))
 
-    def __exit__(self, t, val, traceback):
+    def __exit__(self, exc_type, exc_val, exc_tb):
         for cid in self.chunk_ids:
             self.db.chunk.delete_one(dict(_id=ObjectId(cid)))
 
@@ -58,3 +82,10 @@ def chunk_ids():
     env = TestEnv()
     with env as arr:
         yield arr
+
+
+@pytest.fixture
+def chunk_dispose_list():
+    dispose_obj = Dispose()
+    with dispose_obj as d:
+        yield d

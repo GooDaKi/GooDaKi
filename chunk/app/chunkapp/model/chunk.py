@@ -71,9 +71,15 @@ class Chunk:
         return str(new_id)
 
     @staticmethod
-    def load(chunk_id):
+    def is_valid_id(chunk_id):
         chunk_validator = re.compile('^[0-9a-fA-F]{24}$')
         if not re.match(chunk_validator, chunk_id):
+            return False
+        return True
+
+    @staticmethod
+    def load(chunk_id):
+        if not Chunk.is_valid_id(chunk_id):
             return None
         obj = g.db.chunk.find_one({'_id': g.ObjectId(chunk_id)})
         if obj is None:
@@ -111,12 +117,15 @@ class Chunk:
 
     @staticmethod
     def delete_by_id(chunk_id):
+        if not Chunk.is_valid_id(chunk_id):
+            return None
         result = g.db.chunk.delete_one(dict(_id=g.ObjectId(chunk_id)))
         if result.deleted_count <= 0:
-            return None
+            return False
         return True
 
     @staticmethod
     def delete_all():
         g.db.chunk.delete_many({})
         return True
+
