@@ -1,63 +1,60 @@
-CREATE TYPE sex_enum AS ENUM ('M', 'F');
-CREATE TABLE IF NOT EXISTS "User" (
-    userID      SERIAL,
-    username    VARCHAR(64),
-    password    VARCHAR(255),
-    email       VARCHAR(255),
-    firstname   VARCHAR(255),
-    lastname    VARCHAR(255),
-    sex         sex_enum,
-    phone       VARCHAR(15),
-    birthdate   DATE,
-    address     TEXT,
-    PRIMARY KEY (userID),
-    UNIQUE (username),
-    UNIQUE (email)
+-- progress bigint means that what sub-element the user complete
+-- means that course cannot have more than 64 subjects,
+-- subjects cannot have more than 64 chunks, etc.
+
+create table "User" (
+    userID      serial,
+    username    varchar(64),
+    displayname varchar(64),
+    password    varchar(255),
+    email       varchar(255),
+    firstname   varchar(255),
+    lastname    varchar(255),
+    primary key (userID),
+    unique (username),
+    unique (email),
+    unique (displayname)
 );
 
-CREATE TABLE IF NOT EXISTS "Portfolio" (
-    portID      SERIAL,
-    education   TEXT,
-    PRIMARY KEY (portID)
+create table "Take_Chunk" (
+    userID    int,
+    chunkID   varchar(64),
+    score     int, -- if this chunk is a test
+    type      int, -- 1 is test, 0 otherwise TODO reconsider type
+    completed date,
+    primary key (userID, chunkID),
+    foreign key (userID) references "User" (userID)
 );
 
-CREATE TABLE IF NOT EXISTS "Has_portfolio" (
-    userID      INT,
-    portID      INT,
-    PRIMARY KEY (userID, portID),
-    FOREIGN KEY (userID)  REFERENCES "User" (userID),
-    FOREIGN KEY (portID) REFERENCES "Portfolio" (portID)
+create table "Take_Course" (
+    userID    int,
+    courseID  int,
+    progress  bigint,
+    started   date,
+    completed date,
+    updated   date,
+    primary key (userID, courseID),
+    foreign key (userID) references "User" (userID)
 );
 
-CREATE TABLE IF NOT EXISTS "Taking_course" (
-    portID      INT,
-    courseID    INT UNIQUE,
-    subjectID  	INT,
-    chunkID 	INT,
-    PRIMARY KEY (portID, courseID),
-    FOREIGN KEY (portID) REFERENCES "Portfolio" (portID)
+create table "Take_Subject" (
+    userID    int,
+    subjectID int,
+    progress  bigint,
+    started   date,
+    completed date,
+    updated   date,
+    primary key (userID, subjectID),
+    foreign key (userID) references "User" (userID)
 );
 
-
-CREATE TABLE IF NOT EXISTS "Taken_course" (
-    portID      INT,
-    courseID    INT,
-    subjectID	INT,
-    chunkID		INT,
-	score 		REAL,
-    PRIMARY KEY (portID,courseID,subjectID,chunkID),
-    FOREIGN KEY (portID) REFERENCES "Portfolio" (portID)
-);
-
-
-CREATE TABLE IF NOT EXISTS "Taking_course_score" (
-	portID		INT,
-	courseID	INT,
-	subjectID	INT,
-	chunkID		INT,
-	score 		REAL,
-	PRIMARY KEY (portID,courseID,subjectID,chunkID),
-	FOREIGN KEY (portID) REFERENCES "Portfolio" (portID),
-	FOREIGN KEY (courseID) REFERENCES "Taking_course" (courseID)
-
+create table "Take_Career" (
+    userID    int,
+    careerID  int,
+    progress  bigint,
+    started   date,
+    completed date,
+    updated   date,
+    primary key (userID, careerID),
+    foreign key (userID) references "User" (userID)
 );
