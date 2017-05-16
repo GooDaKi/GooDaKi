@@ -100,7 +100,7 @@ def search_for_chunks():
     options = request.get_json()
     ret = dict(options)
     chunks = model.Chunk.find(ret)
-    if chunks[0].id is None:
+    if len(chunks) == 0 or chunks[0].id is None:
         return None
     return jsonify(list(map(lambda x: x.__dict__, chunks)))
 

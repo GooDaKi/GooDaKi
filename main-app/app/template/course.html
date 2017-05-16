@@ -6,11 +6,13 @@
     <hr style="height:1px;background-color: darkgrey; ">
     <ul style="list-style-type:circle">
     {% for subject in subjects %}
-          <li id="{{subject['subjectID']}}"><a style="font-size: 18px; color:darkgrey" href="/subject/{{subject['subjectID']}}">{{subject['subjectName']}}</a>
-
+          <li id="{{subject['subjectID']}}">
+              <a style="font-size: 18px; color:darkgrey" href="/subject/{{subject['subjectID']}}">{{subject['subjectName']}}</a>
               <ul id="{{subject['subjectID']}}">
                   {% for chunk in subject['chunks'] %}
-                  <li id="{{chunk['id']}}"><a style="font-size: 18px; color:darkgrey" href="/chunk/{{chunk['type']}}/{{chunk['id']}}">{{chunk['name']}}</a></li>
+                  <li id="{{chunk['id']}}">
+                      <a style="font-size: 18px; color:darkgrey" href="/chunk/{{chunk['type']}}/{{chunk['id']}}">{{chunk['name']}}</a>
+                  </li>
                   {% endfor %}
               </ul>
 

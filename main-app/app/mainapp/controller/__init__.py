@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from mainapp.controller import user_control
+from mainapp.controller import user_control,temporary_stub
 
 from mainapp import app
 
