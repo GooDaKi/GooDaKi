@@ -135,9 +135,29 @@ class User:
 
     def get_take_course(self):
         cursor = g.db.cursor()
+        cursor.execute('SELECT * FROM "Take_Career" WHERE userID = %s', (self.id,))
+        if cursor.rowcount == 0:
+            return None
+        careers = cursor.fetchall()
+        cursor.close()
+        cursor = g.db.cursor()
         cursor.execute('SELECT * FROM "Take_Course" WHERE userID = %s', (self.id,))
         if cursor.rowcount == 0:
             return None
         courses = cursor.fetchall()
         cursor.close()
-        return courses
+        cursor = g.db.cursor()
+        cursor.execute('SELECT * FROM "Take_Subject" WHERE userID = %s', (self.id,))
+        if cursor.rowcount == 0:
+            return None
+        subjects = cursor.fetchall()
+        cursor.close()
+        cursor = g.db.cursor()
+        cursor.execute('SELECT * FROM "Take_Chunk" WHERE userID = %s', (self.id,))
+        if cursor.rowcount == 0:
+            return None
+        chunks = cursor.fetchall()
+        cursor.close()
+        return careers, courses, subjects, chunks
+
+
