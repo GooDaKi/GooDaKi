@@ -1,0 +1,12 @@
+{% include "partials/navbar.html" %}
+{% extends "masters/main.html" %}
+{% block page_content %}
+    <h1>{{ career.subjectName }}</h1>
+    <h3>{{ career.description }}</h3>
+    <hr style="height:1px;background-color: darkgrey; ">
+    <ul style="list-style-type:circle">
+    {% for course in courses %}
+          <li id="{{course['courseID']}}"><a style="font-size: 18px; color:darkgrey" href="/course/{{course['courseID']}}">{{course['courseName']}}</a>
+          </li>
+    {% endfor %}
+{% endblock %}

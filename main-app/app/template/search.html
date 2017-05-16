@@ -1,0 +1,56 @@
+{% include "partials/navbar.html" %}
+{% extends "masters/main.html" %}
+{% block page_content %}
+<div class="row">
+     Career
+    <hr style="height:1px;background-color: darkgrey; ">
+        <div class="row">
+        {% if careers %}
+            {% for career in careers['careers']%}
+            <div class="col-md-4">
+                <div class="search-course"><a href="/career/{{career['careerID']}}">{{ career['careerName'] }}</a></div>
+            </div>
+            {% endfor %}
+        {% endif %}
+        </div>
+    Course
+    <hr style="height:1px;background-color: darkgrey; ">
+        <div class="row">
+        {% if courses %}
+            {% for course in courses['course']%}
+            <div class="col-md-4">
+                <div class="search-course"><a href="/course/{{course['courseID']}}">{{course['courseName']}}</a></div>
+            </div>
+            {% endfor %}
+        {% endif %}
+        </div>
+    Subjects
+    <hr style="height:1px;background-color: darkgrey; ">
+        <div class="row">
+        {% if subjects %}
+            {% for subject in subjects['subjects']%}
+            <div class="col-md-4">
+                <div class="search-course"><a href="/subject/{{subject['subjectID']}}">{{subject['subjectName']}}</a></div>
+            </div>
+            {% endfor %}
+        {% endif %}
+        </div>
+    Chunks
+    <hr style="height:1px;background-color: darkgrey; ">
+        <div class="row">
+        {% if chunks %}
+            {% for chunk in chunks%}
+            <div class="col-md-4">
+                <div class="search-course"><a href="/chunk/{{chunk['type']}}/{{chunk['id']}}">{{chunk['name']}}</a></div>
+            </div>
+            {% endfor %}
+        {% endif %}
+        </div>
+<!--             <div class="search-course-more">view more</div> -->
+
+
+    </div>
+</div>
+{% endblock %}
+
+

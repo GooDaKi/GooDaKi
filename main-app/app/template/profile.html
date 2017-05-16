@@ -1,0 +1,109 @@
+{% extends "partials/profile_sidebar.html" %}
+
+{% block set_active %}
+Profile
+{% endblock %}
+
+{% block title %}
+Profile
+{% endblock %}
+
+{% block require_main -%}admin{%- endblock %}
+
+    {% block profile_panel %}
+    <div class="row container-fluid">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-10">
+        <div class="row">
+            <div class="col-sm-4 personal-image">
+            </div>
+            <div class="col-sm-4">
+                <hr>
+                <h3>{{user.name}}</h3>
+                <h3>{{user.firstname}}</h3>
+                <h3>{{user.email}}</h3>
+            </div>
+            <div class="col-sm-4">
+                <hr>
+                <h3>{{user.displayname}}</h3>
+                <h3>{{user.lastname}}</h3>
+            </div>
+        </div>
+            <div class="row">
+            <div class="col-sm-4 in-progress">
+                <h3>In progress</h3>
+            </div>
+            <div class="col-sm-4 where-left">
+                    <form class="login-form text-center" name="login-form" method="post" action="/login" id="login-form">
+                        <input type="text" name="where-left" placeholder="Continue where you left off?" />
+                    </form>
+            </div>
+            <div class="col-sm-4 search">
+                    <form class="login-form text-center" name="login-form" method="post" action="/search" id="login-form">
+                        <input type="text" name="query" placeholder="Search..." />
+                    </form>
+            </div>
+        </div>
+            <div class="row">
+            <div class="col-sm-4">
+                <div class="course-in-progress"></div>
+            </div>
+            <div class="col-sm-4">
+                <div class="course-in-progress"></div>
+            </div>
+            <div class="col-sm-4">
+                <div class="course-in-progress"></div>
+            </div>
+        </div>
+
+            <div class="row">
+            <div class="col-sm-4">
+                <div class="course-in-progress"></div>
+            </div>
+            <div class="col-sm-4">
+                <div class="course-in-progress"></div>
+            </div>
+            <div class="col-sm-4">
+                <div class="course-in-progress"></div>
+            </div>
+        </div>
+                <div class="course-in-progress-more">view more</div>
+                <hr style="height:1px;background-color: darkgrey; ">
+
+
+        <div class="row">
+            <div class="col-sm-4 in-progress">
+                <h3>Completed</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="course-completed"></div>
+            </div>
+            <div class="col-sm-4">
+                <div class="course-completed"></div>
+            </div>
+            <div class="col-sm-4">
+                <div class="course-completed"></div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="course-completed"></div>
+            </div>
+            <div class="col-sm-4">
+                <div class="course-completed"></div>
+            </div>
+            <div class="col-sm-4">
+                <div class="course-completed"></div>
+            </div>
+        </div>
+                <div class="course-completed-more">view more</div>
+                <hr style="height:1px;background-color: darkgrey; ">
+            </div>
+    </div>
+
+{% endblock %}
+
+

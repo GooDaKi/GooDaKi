@@ -1,0 +1,17 @@
+{% include "partials/navbar.html" %}
+{% extends "masters/main.html" %}
+{% block page_content %}
+    <h1>{{ subject.subjectName }}</h1>
+    <h3>{{ subject.description }}</h3>
+    <hr style="height:1px;background-color: darkgrey; ">
+    <ul style="list-style-type:circle">
+    {% for chunk in chunks %}
+          <li id="{{chunk['id']}}"><a style="font-size: 18px; color:darkgrey" href="/chunk/{{chunk['type']}}/{{chunk['id']}}">{{chunk['name']}}</a>
+          </li>
+    {% endfor %}
+{% endblock %}
+
+
+
+
+

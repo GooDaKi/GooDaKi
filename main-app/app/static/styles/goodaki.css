@@ -1,0 +1,271 @@
+.login-box {
+    margin-top: 100px;
+    font-size: 20px;
+    color: grey;
+    border: solid 2px darkgrey;
+}
+
+
+
+.login-form {
+    border: 2px grey;
+    padding: 15px;
+}
+
+.login-form .btn-block{
+    width: 80%;
+    background-color: white;
+    border:solid 2px darkgrey;
+    border-radius: 10px;
+    margin:auto;
+    color: darkgrey;
+    font-size: 18px;
+    padding: 5px;
+
+}
+
+.login-form input{
+    width: 80%;
+    font-size: 18px;
+    border-radius: 10px;
+    border:solid 2px darkgrey;
+    background-color: white;
+    padding: 10px;
+    margin: 7px;
+}
+
+.checkbox input[type="checkbox"]{
+    font-size: 18px;
+    border-radius: 10px;
+    border:solid 2px darkgrey;
+    background-color: white;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    margin-top:5px;
+    margin-left: 0px;
+
+}
+
+.checkbox label{
+    margin-left: 10px;
+    font-size: 16px;
+    color: darkgrey;
+}
+.checkbox {
+    width: 80%;
+    margin:auto;
+    text-align: left;
+}
+
+
+.forget-pass-register-here{
+    margin:auto;
+    width: 80%;
+    height: 35px;
+}
+
+.forget-password{
+    float: left;
+    font-size: 16px;
+    color: darkgrey;
+}
+
+.register-here{
+    float: right;
+    font-size: 16px;
+    color: darkgrey;
+}
+
+h1{
+    font-size: 54px;
+}
+
+.register-box {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 20px;
+    color: grey;
+    border: solid 2px darkgrey;
+}
+.register-form {
+    border: 2px darkgrey;
+    padding: 15px;
+    text-align: left;
+}
+.register-form .form-group{
+    width: 80%;
+    margin: auto;
+}
+
+.register-form .input-group {
+    width: 100%;
+    margin: auto;
+    height: 20px;
+    padding: 7px;
+    font-size: 16px;
+}
+
+.register-form .form-control{
+    font-size: 18px;
+    border-radius: 10px;
+    border:solid 2px darkgrey;
+    background-color: white;
+
+}
+
+.register-form .btn-block{
+    width: 77%;
+    background-color: white;
+    border:solid 2px darkgrey;
+    border-radius: 10px;
+    margin:auto;
+    color: darkgrey;
+    font-size: 18px;
+    padding: 5px;
+    margin-top: 10px;
+
+}
+
+.input-group :first-child.form-control, :first-child.input-group-addon, :first-child.input-group-btn > .btn, :first-child.input-group-btn > .btn-group > .btn, :first-child.input-group-btn > .dropdown-toggle, :last-child.input-group-btn > :not(:last-child):not(.dropdown-toggle).btn, :last-child.input-group-btn > :not(:last-child).btn-group > .btn{
+    border-top-right-radius:10px;
+    border-bottom-right-radius:10px;
+}
+
+.first-last{
+    padding: 0px;
+}
+
+.profile-sidebar{
+    padding: 0px;
+    font-size: 30px;
+}
+.profile-menu{
+    color: darkgrey;
+    width: 100%;
+}
+
+.profile-menu li a{
+    color: darkgrey;
+    font-size: 22px;
+    width: 100%;
+}
+
+.profile-menu li + li {
+    margin-top: 0px;
+}
+
+.profile-menu li{
+    border: solid 1px darkgrey;
+}
+
+#profile-menu h4{
+    font-size: 28px;
+}
+
+.personal-image{
+    margin-top:30px;
+    width: 124px;
+    height: 124px;
+    -webkit-border-radius: 62px;
+    -moz-border-radius: 62px;
+    border-radius: 62px;
+    border: solid 2px darkgrey;
+}
+
+.where-left input{
+    padding: 5px;
+    border-radius: 15px;
+    border: solid 2px darkgrey;
+    font-size:16px;
+}
+
+.search input{
+    padding: 5px;
+    border-radius: 15px;
+    border: solid 2px darkgrey;
+    font-size:16px;
+}
+
+.in-progress{
+    width: 20%;
+}
+
+.course-in-progress{
+    width: 80%;
+    height: 100px;
+    border-radius: 15px;
+    border: solid 2px darkgrey;
+    margin:auto;
+    margin-bottom: 15px;
+}
+
+.course-in-progress-more{
+    margin:auto;
+    width: 10%;
+    height: 30px;
+    border-radius: 15px;
+    border: solid 2px darkgrey;
+    text-align: center;
+}
+
+
+.course-completed{
+    width: 80%;
+    height: 100px;
+    border-radius: 15px;
+    border: solid 2px darkgrey;
+    margin:auto;
+    margin-bottom: 15px;
+}
+
+.course-completed-more{
+    margin:auto;
+    width: 10%;
+    height: 30px;
+    border-radius: 15px;
+    border: solid 2px darkgrey;
+    text-align: center;
+}
+
+.search-course{
+    width: 80%;
+    height: 100px;
+    border-radius: 15px;
+    border: solid 2px darkgrey;
+    margin:auto;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.search-course a{
+    font-size: 24px;
+    color: darkgrey;
+    line-height: 85px;
+}
+
+.search-course-more{
+    margin:auto;
+    width: 10%;
+    height: 30px;
+    border-radius: 15px;
+    border: solid 2px darkgrey;
+    text-align: center;
+}
+
+#search{
+    display: inline-block;
+    position:absolute;
+    margin:auto;
+    left: 40%;
+    width:280px;
+}
+
+#search input{
+    margin-top:5px;
+}
+
+.navbar-right{
+    position: absolute;
+    right: 10px;
+}

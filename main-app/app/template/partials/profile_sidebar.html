@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="#f2a60e">
+
+    <title>teacup admin - {% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/goodaki.css') }}">
+    <link rel="icon" type="image/png" href="/static/img/favicon.png">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='fonts/cs_chatthai.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/c3.min.css') }}">
+
+    {% block handlebars_template %}{% endblock %}
+
+    <script src="/static/js/require-config.js"></script>
+    <script src="{{ url_for('static', filename='js/lib/require.js') }}"></script>
+    <script src="/static/js/{% block require_main -%}{%- endblock %}.js"></script>
+
+    {% block special_styles %}{% endblock %}
+    {% block special_scripts %}{% endblock %}
+
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-2 profile-sidebar">
+
+            <ul class="nav nav-pills nav-stacked profile-menu" id="profile-menu">
+                <div class="hidden" id="active-menu-selector">{% block set_active %}{% endblock %}</div>
+                <li id="menu-profile"><a href="/profile">Profile</a></li>
+                <li id="menu-course"><a href="/admin/stats">My course</a></li>
+                <li id="menu-subject"><a href="/admin/feedback"></span>My subject</a></li>
+                <li id="menu-career"><a href="/admin/promote"></span>My career path</a></li>
+                <li id="menu-authors"><a href="/admin/reported"></span>Authors</a></li>
+                <!--<li id="menu-banned-users"><a href="/admin/banned_users"><span class="glyphicon glyphicon-ban-circle"></span>Banned Users</a></li>-->
+          </ul>
+            <script>
+                var activeMenu  = document.getElementById('active-menu-selector').innerHTML;
+                var target      = document.getElementById('menu-' + activeMenu.trim());
+                target.className += 'active';
+            </script>
+        </div>
+        <div class="col-sm-10 profile-panel">
+            <!--<div class="container">-->
+                {% block profile_panel %}{% endblock %}
+            <!--</div>-->
+        </div>
+    </div>
+</div>
+<div id="alert-list">
+</div>
+{% block script %}{% endblock %}
+</body>
+</html>

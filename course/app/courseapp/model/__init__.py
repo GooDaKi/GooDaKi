@@ -1,6 +1,6 @@
 from .course import Course
 from .subject import Subject
-# from .career import Career
+from .career import Career
 
 from courseapp import app
 from flask import g

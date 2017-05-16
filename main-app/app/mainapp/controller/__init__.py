@@ -10,6 +10,6 @@ def forbidden(e):
     return '403: forbidden', 403
 
 
-@app.error_handler(404)
+@app.errorhandler(404)
 def page_not_found(e):
     return '404: page not found', 404

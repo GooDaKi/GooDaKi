@@ -1,0 +1,12 @@
+{% include "partials/navbar.html" %}
+{% extends "partials/chunk_template.html" %}
+{% block chunk_content %}
+	{% if chunk['video_link']  %}
+	<div style="text-align: center;">
+    <iframe width="420" height="345" src="{{ chunk['video_link'] }}" allowfullscreen></iframe>
+    </div>
+    {% endif %}
+    <h4>{{ chunk['text'] }}</h4>
+
+
+{% endblock %}

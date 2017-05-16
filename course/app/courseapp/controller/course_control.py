@@ -258,39 +258,83 @@ def delete_subject(id):
 
 @app.route('/api/course/career/<id>', methods=['GET'])
 def get_career_info(id):
-    out = "getcareerInfo"
-    return out
+    careers = model.Career.get_by_id(id)
+    if careers is None:
+        return None
+    return jsonify(careers.__dict__)
+
+
+@app.route('/api/course/career', methods=['GET'])
+def get_all_career():
+    cur_careers_count = request.args.get('career-count', 0, type=int)
+    if 'limit' in request.args:
+        limit = int(request.args['limit'])
+        careers, is_more_careers = model.Career.get_all(limit_no=limit, scroll_no=cur_careers_count, all=False)
+    else:
+        careers, is_more_careers = model.Career.get_all()
+        if careers is None or is_more_careers is None:
+            return "None"
+    return jsonify(dict(ccareers=list(map(lambda x: x.__dict__, careers)), is_more_careers=is_more_careers))
 
 
 @app.route('/api/course/career/author/<authorid>', methods=['GET'])
 def get_career_by_author(authorid):
-    out = "getcareerInfobyauthor"
-    return out
+    cur_careers_count = request.args.get('careers-count', 0, type=int)
+    if 'limit' in request.args:
+        limit = int(request.args['limit'])
+        careers, is_more_careers = model.Career.get_by_author_id(authorid, limit_no=limit, scroll_no=cur_careers_count,
+                                                          all=False)
+    else:
+        careers, is_more_careers = model.Career.get_by_author_id(authorid)
+        if careers is None or is_more_careers is None:
+            return None
+    return jsonify(dict(careers=list(map(lambda x: x.__dict__, careers)), is_more_careers=is_more_careers))
 
 
-@app.route('/api/subject/career', methods=['POST'])
+@app.route('/api/course/career', methods=['POST'])
 def create_career():
     info = request.get_json()
-    out = "createcareer"
-    return out
+    result = model.Career.create(info)
+    if result is None:
+        return None
+    # return 'successfully create course name: {}'.format(info['courseName']), out
+    return jsonify(result)
 
 
 @app.route('/api/course/career/search', methods=['POST'])
 def search_career():
     info = request.get_json()
-    out = "searchcareer"
-    return out
+    if 'course-count' in info:
+        cur_careers_count = info['course-count']
+    else:
+        cur_careers_count = 0
+    if 'limit' in request.args:
+        limit = int(request.args['limit'])
+        careers, is_more_careers = model.Career.search(info['query'], limit_no=limit, scroll_no=cur_careers_count, all=False)
+    else:
+        careers, is_more_careers = model.Career.search(info['query'])
+        if careers is None or is_more_careers is None:
+            return None
+
+    return jsonify(dict(careers=list(map(lambda x: x.__dict__, careers)), is_more_careers=is_more_careers))
 
 
 @app.route('/api/course/career', methods=['PUT'])
 def edit_career():
-    info = request.get_jso
-    out = "editcareer"
-    return out
+    info = request.get_json()
+    career = model.Career.get_by_id(info['careerID'])
+    career = career.edit(info)
+    result = career.save()
+    if result is None:
+        return None
+    # return 'successfully edit course name: {}'.format(course.courseName), result
+    return jsonify(result)
 
 
 @app.route('/api/course/career/<id>', methods=['DELETE'])
 def delete_career(id):
-    out = "deletecareer"
-    return out
+    ret = model.Career.delete_by_id(id)
+    if ret is None:
+        return 'error occurred. Maybe the id is invalid', 400
+    return 'deleted select with id: {}'.format(id)
 

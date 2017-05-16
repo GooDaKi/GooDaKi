@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, width=device-width">
+    <title>Goodaki</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/goodaki.css') }}">
+
+</head>
+<body class="{% block body_class %}{% endblock %}">
+{% block page_alert %}{% endblock %}
+{% block page_body %}
+    <div class="container">
+        {% block page_content %}
+            Hello
+        {% endblock %}
+    </div>
+{% endblock %}
+
+<script type="text/javascript" src="  {{ url_for('static', filename='js/lib/jquery-1.12.4.min.js') }}"></script>
+<script type="text/javascript" src="  {{ url_for('static', filename='js/lib/bootstrap.js') }}"></script>
+{% block script %}{% endblock %}
+<!--<script type="text/javascript" src="  {{ url_for('static', filename='js/opd.js') }}"></script>-->
+</body>
+</html>

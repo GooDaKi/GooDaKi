@@ -7,11 +7,13 @@ import flask_login
 
 class User:
     def __init__(self, options=None):
-        if options is not None and type(options) is dict:
-            options['id'] = options.pop('userID', None)
-            options.pop('password')
+        if options is not None:
+            options['id'] = options['userid']
             for key, val in options.items():
                 setattr(self, key, val)
+            self.is_authenticated = True
+            self.is_active = True
+            self.is_anonymous = False
         else:
             self.id = None
             self.username = None
@@ -19,6 +21,9 @@ class User:
             self.email = None
             self.firstname = None
             self.lastname = None
+            self.is_active = False
+            self.is_authenticated = False
+            self.is_anonymous = True
 
     def get_id(self):
         return str(self.id)
@@ -28,7 +33,7 @@ class User:
 
     def verify_password(self, password):
         cursor = g.db.cursor()
-        cursor.execute('select "password" from "User" where userid= (%s)', (self.user_id,))
+        cursor.execute('select "password" from "User" where userID= (%s)', (self.user_id,))
         pwd = cursor.fetchone()['password']
         cursor.close()
         if not bcrypt_sha256.verify(password, pwd):
@@ -43,16 +48,17 @@ class User:
 
     @staticmethod
     def load(user_id):
-        if user_id is None:
-            return None
         user_id = int(user_id)
-        cursor = g.db.cursor('select * from "User" where userid = %s', (user_id,))
-        if cursor.rowcount != 1:
+        cursor = g.db.cursor()
+        cursor.execute('SELECT * FROM "User" WHERE userID = %s', (user_id,))
+        if cursor.rowcount > 0:
+            row = cursor.fetchone()
+            cursor.close()
+            return User(row)
+        else:
             cursor.close()
             return None
-        obj = cursor.fetchone()
-        cursor.close()
-        return User(obj)
+
 
     @staticmethod
     def load_by_username(username):
@@ -106,3 +112,32 @@ class User:
         cursor.close()
         user = User.load(userid)
         return user
+
+
+    @staticmethod
+    def try_login(username, password):
+        # NOTE this is kinda different from class diagram where 'authenticate'
+        # is not static. I've fix that. see authenticate() below. -- tae
+        cursor = g.db.cursor()
+        cursor.execute('SELECT * FROM "User" WHERE username = %s', (username,))
+        if cursor.rowcount == 0:
+            return None
+        row = cursor.fetchone()
+        real_password = row['password']
+        cursor.close()
+
+        # TODO: bcrypt
+        # if not bcrypt_sha256.verify(password, hashed):
+        if not bcrypt_sha256.verify(password, real_password):
+            return -1
+        u = User(row)
+        return u
+
+    def get_take_course(self):
+        cursor = g.db.cursor()
+        cursor.execute('SELECT * FROM "Take_Course" WHERE userID = %s', (self.id,))
+        if cursor.rowcount == 0:
+            return None
+        courses = cursor.fetchall()
+        cursor.close()
+        return courses

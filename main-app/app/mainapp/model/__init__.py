@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# from .user import User
+from .user import User
 
 from mainapp import app
 from flask import g

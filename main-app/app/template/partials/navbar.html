@@ -1,0 +1,25 @@
+<nav class="navbar navbar-default navbar-fixed-top>
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" style="font-size: 28px" href="/">
+                GooDaKi
+            </a>
+        </div>
+
+                <form method="post" action="/search" id="search" class="navbar-form navbar-left">
+                    <div class="form-group">
+                    <input type="text" name="query" class="form-control search-box"
+                           placeholder="Search...">
+                    <button type="submit" class="btn btn-link submit"><span class="glyphicon glyphicon-search"></span>
+                    </button>
+                        </div>
+                </form>
+
+        <ul class="nav navbar-nav navbar-right">
+          <li><a style="font-size: 18px" href="/profile/{{current_user.id}}">Profile</a></li>
+          <li><a style="font-size: 18px" href="/logout">Logout</a></li>
+
+            </ul>
+
+    </div>
+</nav>
