@@ -51,7 +51,7 @@ def load_user(userid):
 def render_login():
     if flask_login.current_user.is_authenticated:
         return redirect('/')
-    return render_template('login.html')
+    return render_template('login.html',error = None)
 
 
 @app.route('/login', methods=["POST"])
@@ -62,10 +62,10 @@ def login():
         if u is None:
             # username does not exist
             flash('Unknown username', 'error')
-            return redirect(url_for('render_login'))
+            return render_template('login.html',error='Unknown username')
         elif u == -1:
             flash('Wrong password', 'error')
-            return redirect(url_for('render_login'))
+            return render_template('login.html',error='Wrong password')
         else:
             # Login successful
             flask_login.login_user(u)
@@ -99,10 +99,10 @@ def process_register():
         user_out = model.User.try_register(options)
         if user_out == -1:
             # TODO handle when username already exist
-            render_template('register.html', error='error-1')
+            render_template('register.html', error='username already exist')
         elif user_out == -2:
             # TODO handle when e-mail already exist
-            render_template('register.html', error='error-2')
+            render_template('register.html', error='e-mail already exist')
         else:
             # register successful
             return render_template('login.html', registered='successfully')

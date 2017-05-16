@@ -6,6 +6,14 @@
     <form class="login-form text-center" name="login-form" method="post" action="/login" id="login-form">
         <h1>GooDaKi</h1>
         <h3>Log in Form</h3>
+        {% if error %}
+                    <div class="alert alert-danger">
+
+                            {{error}}!!!!!
+                            Please try again
+
+                    </div>
+                {% endif %}
         <div class="form-group">
             <input type="text" name="username" placeholder="username" autofocus required/>
         </div>

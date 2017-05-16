@@ -127,6 +127,10 @@ h1{
 
 }
 
+.loginpage{
+    width: 77%;
+}
+
 .input-group :first-child.form-control, :first-child.input-group-addon, :first-child.input-group-btn > .btn, :first-child.input-group-btn > .btn-group > .btn, :first-child.input-group-btn > .dropdown-toggle, :last-child.input-group-btn > :not(:last-child):not(.dropdown-toggle).btn, :last-child.input-group-btn > :not(:last-child).btn-group > .btn{
     border-top-right-radius:10px;
     border-bottom-right-radius:10px;
@@ -269,3 +273,4 @@ h1{
     position: absolute;
     right: 10px;
 }
+
