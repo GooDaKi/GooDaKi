@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="theme-color" content="#f2a60e">
 
-    <title>teacup admin - {% block title %}{% endblock %}</title>
+    <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/goodaki.css') }}">
-    <link rel="icon" type="image/png" href="/static/img/favicon.png">
+
 
     <link rel="stylesheet" href="{{ url_for('static', filename='fonts/cs_chatthai.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
@@ -31,11 +31,11 @@
 
             <ul class="nav nav-pills nav-stacked profile-menu" id="profile-menu">
                 <div class="hidden" id="active-menu-selector">{% block set_active %}{% endblock %}</div>
-                <li id="menu-profile"><a href="/profile">Profile</a></li>
-                <li id="menu-course"><a href="/admin/stats">My course</a></li>
-                <li id="menu-subject"><a href="/admin/feedback"></span>My subject</a></li>
-                <li id="menu-career"><a href="/admin/promote"></span>My career path</a></li>
-                <li id="menu-authors"><a href="/admin/reported"></span>Authors</a></li>
+                <li id="menu-profile"><a href="/profile/{{ current_user.id }}">Profile</a></li>
+                <li id="menu-course"><a href="#">My course</a></li>
+                <li id="menu-subject"><a href="#"></span>My subject</a></li>
+                <li id="menu-career"><a href="#"></span>My career path</a></li>
+                <li id="menu-authors"><a href="#"></span>Authors</a></li>
                 <!--<li id="menu-banned-users"><a href="/admin/banned_users"><span class="glyphicon glyphicon-ban-circle"></span>Banned Users</a></li>-->
           </ul>
             <script>

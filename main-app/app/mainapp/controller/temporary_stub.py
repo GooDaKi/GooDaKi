@@ -87,9 +87,21 @@ def search_process():
         chunksB = chunksB.json()
     except ValueError:
         chunksB = []
-    chunks = chunksA+chunksB
-    if len(chunks)==0:
-        chunks = None
+    if len(chunksA) != 0 and len(chunksB) != 0:
+        chunks = chunksA
+        for i in chunksB:
+            ch = True
+            for j in chunksA:
+                if i['id']==j['id']:
+                    ch = False
+            if ch :
+                chunks = chunks+[i]
+    else:
+        chunks = chunksA+chunksB
+        if len(chunks)==0:
+            chunks = None
+    
+    
     return render_template('search.html',careers=careers,courses=courses, subjects=subjects, chunks=chunks)
 
 
