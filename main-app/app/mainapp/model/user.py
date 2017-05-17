@@ -59,7 +59,6 @@ class User:
             cursor.close()
             return None
 
-
     @staticmethod
     def load_by_username(username):
         cursor = g.db.cursor()
@@ -113,51 +112,49 @@ class User:
         user = User.load(userid)
         return user
 
-
     @staticmethod
     def try_login(username, password):
-        # NOTE this is kinda different from class diagram where 'authenticate'
-        # is not static. I've fix that. see authenticate() below. -- tae
         cursor = g.db.cursor()
         cursor.execute('SELECT * FROM "User" WHERE username = %s', (username,))
         if cursor.rowcount == 0:
+            cursor.close()
             return None
-        row = cursor.fetchone()
-        real_password = row['password']
+        obj = cursor.fetchone()
+        hashed = obj['password']
         cursor.close()
 
-        # TODO: bcrypt
-        # if not bcrypt_sha256.verify(password, hashed):
-        if not bcrypt_sha256.verify(password, real_password):
+        if not bcrypt_sha256.verify(password, hashed):
             return -1
-        u = User(row)
+        u = User(obj)
         return u
 
     def get_take_course(self):
         cursor = g.db.cursor()
         cursor.execute('SELECT * FROM "Take_Career" WHERE userID = %s', (self.id,))
         if cursor.rowcount == 0:
+            cursor.close()
             return None
         careers = cursor.fetchall()
         cursor.close()
         cursor = g.db.cursor()
         cursor.execute('SELECT * FROM "Take_Course" WHERE userID = %s', (self.id,))
         if cursor.rowcount == 0:
+            cursor.close()
             return None
         courses = cursor.fetchall()
         cursor.close()
         cursor = g.db.cursor()
         cursor.execute('SELECT * FROM "Take_Subject" WHERE userID = %s', (self.id,))
         if cursor.rowcount == 0:
+            cursor.close()
             return None
         subjects = cursor.fetchall()
         cursor.close()
         cursor = g.db.cursor()
         cursor.execute('SELECT * FROM "Take_Chunk" WHERE userID = %s', (self.id,))
         if cursor.rowcount == 0:
+            cursor.close()
             return None
         chunks = cursor.fetchall()
         cursor.close()
         return careers, courses, subjects, chunks
-
-
